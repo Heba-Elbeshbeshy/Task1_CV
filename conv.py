@@ -1,67 +1,41 @@
-import random
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
 
-def generate_noise(image, noise_type):
-    if noise_type == "gaussian_noise":
-
-        gaussian_noise = np.random.normal(0,10,(image.shape[0], image.shape[1]))
-        save_image("Gaussian random noise.jpg", gaussian_noise)
+def calculate_target_size(img_size: int, kernel_size: int) -> int:
+    num_pixels = 0
     
-        return gaussian_noise
+    # From 0 up to img size (if img size = 224, then up to 223)
+    for i in range(img_size):
+        # Add the kernel size (let's say 3) to the current i
+        added = i + kernel_size
+        # It must be lower than the image size
+        if added <= img_size:
+            # Increment if so
+            num_pixels += 1
+      
+    return num_pixels
 
-    if noise_type == "uniform_noise":
-
-        uniform_noise =  np.random.uniform(0,50,(image.shape[0], image.shape[1]))
-        save_image("Uniform random noise.jpg", uniform_noise)
-
-        return uniform_noise
-
-# Add salt and pepper noise to image , prob: Probability of the noise
-def sp_noise(image,prob):
-
-    output = np.zeros(image.shape,np.uint8)
-    thres = 1 - prob 
-    for i in range(image.shape[0]):
-        for j in range(image.shape[1]):
-            rdn = random.random()
-            if rdn < prob:
-                output[i][j] = 0
-            elif rdn > thres:
-                output[i][j] = 255
-            else:
-                output[i][j] = image[i][j]
-    return output
-
-# adding noisy image to original image gaussian & uniform
-def image_plus_noise(image, noise_image):
-
-    noisy_image = np.add(image, noise_image)
-    return noisy_image
-
-
-def display_image(image_to_display, type):
-
-    if type == "Gray":
-        imgplot = plt.imshow(image_to_display, cmap='gray')
-    else:
-        imgplot = plt.imshow(image_to_display)
-
-    plt.show()
-
-
-def from_RGB_to_GS(image):
-
-    R, G, B = image[:,:,0], image[:,:,1], image[:,:,2]
-    imgGray = 0.2989 * R + 0.5870 * G + 0.1140 * B
-
-    return imgGray
-
-def save_image(image_name, image_to_save):
-
-    mpimg.imsave(image_name, image_to_save)
-
-
-
+def convolve(img: np.array, kernel: np.array) -> np.array:
+    # Assuming a rectangular image
+    tgt_size = calculate_target_size(
+        img_size=img.shape[0],
+        kernel_size=kernel.shape[0]
+    )
+    # To simplify things
+    k = kernel.shape[0]
     
+    # 2D array of zeros
+    convolved_img = np.zeros(shape=(tgt_size, tgt_size))
+    
+    # Iterate over the rows
+    for i in range(tgt_size):
+        # Iterate over the columns
+        for j in range(tgt_size):
+            # img[i, j] = individual pixel value
+            # Get the current matrix
+            mat = img[i:i+k, j:j+k]
+            
+            # Apply the convolution - element-wise multiplication and summation of the result
+            # Store the result to i-th row and j-th column of our convolved_img array
+            convolved_img[i, j] = np.sum(np.multiply(mat, kernel))
+            
+    return convolved_img
