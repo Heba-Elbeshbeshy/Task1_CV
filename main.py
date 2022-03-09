@@ -1,13 +1,10 @@
 from utils import *
-<<<<<<< HEAD
 from filtering import *
 from conv import *
 
 # Read Image
-=======
 import cv2
 # Let's first create a zero image with the same dimensions of the loaded image
->>>>>>> 0e73502abd10ffc6ad39f7bbb959c2548de47800
 image = mpimg.imread('apple.jpeg')
 gray_image = from_RGB_to_GS(image)
 
@@ -27,7 +24,6 @@ sp_image = sp_noise(gray_image,0.00000025)
 display_image(sp_image, "Gray")
 
 
-<<<<<<< HEAD
 #filtering
 # medianFilter = median_filter(gauss_image)
 # display_image(medianFilter, "Gray")
@@ -40,7 +36,8 @@ display_image(avg_filter, "Gray")
 
 medianFilter = median_filter(sp_image)
 display_image(medianFilter, "Gray")
-=======
+
+
 # fadel taka feha
 # 4- Draw histogram and distribution curve
 #PixelValues,Frequencies=HistDistFun(gray_image)
@@ -57,5 +54,5 @@ display_image(equalized_image, "Gray")
 # 6- Normalize the image
 normalized_image= normalization(cols=333, rows=333, x_min=0, x_max=255, x_new_min=0, x_new_max=33, Greyimg=gray_image)
 display_image(normalized_image, "Gray")
->>>>>>> 0e73502abd10ffc6ad39f7bbb959c2548de47800
+
 
