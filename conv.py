@@ -22,7 +22,8 @@ def convolve(img: np.array, kernel: np.array) -> np.array:
     )
     # To simplify things
     k = kernel.shape[0]
-    
+    temp = 0
+    temp_new = 0
     # 2D array of zeros
     convolved_img = np.zeros(shape=(tgt_size, tgt_size))
     
@@ -32,10 +33,12 @@ def convolve(img: np.array, kernel: np.array) -> np.array:
         for j in range(tgt_size):
             # img[i, j] = individual pixel value
             # Get the current matrix
-            mat = img[i:i+k, j:j+k]
-            
+            temp = img[i:i+k, j:j+k]*kernel[i, j]
+            temp_new += temp
+    
             # Apply the convolution - element-wise multiplication and summation of the result
             # Store the result to i-th row and j-th column of our convolved_img array
-            convolved_img[i, j] = np.sum(np.multiply(mat, kernel))
+            convolved_img[i, j] = temp_new
+            
             
     return convolved_img
